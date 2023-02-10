@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            HW6
+        </title>
+        <link rel="stylesheet" href="static/hw2StyleSheet.css">
+    </head>
+
+    <body id="body">
+        <div id="eventBox">
+            <p id = "eventText">Events Search</p>
+            <hr id="hline">
+            <form id="form1">
+                <label class="reqField" for="keywordBox">Keyword</label>
+                <input type="text" id="keywordBox" name="keywordBox" required>
+
+                <div id = "midSec">
+                    <div id="left">
+                        <label for="DistanceBox">Distance (miles)</label>
+                        <input type="number" id="DistanceBox" name="DistanceBox" placeholder="10">
+                    </div>
+
+                    <div id="right">
+                        <label class="reqField" for="CategoryBox">Category</label>
+                        <select name="CategoryBox" id="CategoryBox">
+                            <option value="Default">Default</option>
+                            <option value="Music">Music</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Arts">Arts</option>
+                            <option value="Theatre">Theatre</option>
+                            <option value="Film">Film</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="divInline">
+                    <label class="reqField" for="LocationBox">
+                        Location
+                    </label>
+                    <input type="checkbox" value="checkbox" id="cbox" onchange="removeInput()" autocomplete="off">Auto-Detect Location
+                </div>
+
+                <input type="text" id="LocationBox" name="LocationBox" required>
+
+                <div id="outerEndButton">
+                    <div id="endButton">
+                        <input name="search" id="search" value="SEARCH" type="button" onclick="searchFuncOnClick()"/>
+                        <!-- <button name="search" id="search" value="SEARCH" type="button" onclick="searchFuncOnClick()">SEARCH</button> -->
+                        <input name="clear" id="clear" value="CLEAR" type="button" onclick="clearFunc()"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+
+    <script src = "static/myFunction.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.2/axios.min.js"></script>
+
+</html>
