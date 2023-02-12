@@ -20,8 +20,9 @@ def test():
 
     segmentDict = {"Music":"KZFzniwnSyZfZ7v7nJ",
                     "Sports":"KZFzniwnSyZfZ7v7nE",
-                    "Arts":"KZFzniwnSyZfZ7v7na",
-                    "Theatre":"KZFzniwnSyZfZ7v7na",
+                    "Arts & Theatre":"KZFzniwnSyZfZ7v7na",
+                    "Film":"KZFzniwnSyZfZ7v7nn",
+                    "Miscellaneous":"KZFzniwnSyZfZ7v7n1",
                     "Default":""}
     segmentId = segmentDict[cat]
 

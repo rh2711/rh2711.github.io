@@ -19,7 +19,7 @@
 
 #eventText{
     color: white;
-    font-family:'Merriweather Regular';
+    font-family:serif;
     font-size: 30px;
     margin: 0 auto;
     text-align: center;
@@ -141,7 +141,6 @@ label{
     width: 95px;
     height: 40px;
     border: none;
-    /* border-bottom: solid; */
     border-color: rgba(255, 115, 0, 0.903);
     font-size: 13px;
 }
@@ -467,6 +466,7 @@ th{
     text-align: center;
     width: max-content;
     align-items: center;
+    margin-bottom: 20px;
     /* margin-bottom: 15px;
     margin-top: 15px; */
 }
@@ -476,7 +476,7 @@ th{
     display: block;
     width: 120px;
     height: 70px;
-    margin-top: 20px;
+    margin-top: 0px;
 }
 
 #padd{

@@ -4,7 +4,9 @@ var ipiResp;
 var data;
 var keyW;
 
-var sortAsc = false;
+var sortAscEvnt = false;
+var sortAscGen = false;
+var sortAscVen = false;
 
 var map = {};
 
@@ -56,43 +58,6 @@ function clearFunc(){
 
 async function searchFuncOnClick(){
 
-    var lat;
-    var lng;
-    var dist = "10";
-
-    if (document.getElementById("DistanceBox").value != ""){
-        dist = document.getElementById("DistanceBox").value;
-    }
-
-    keyW = document.getElementById("keywordBox").value;
-    keyW = keyW.replace(/ /g,"+");
-    console.log(keyW);
-
-    if (document.getElementById("cbox").checked == false){
-        google_api_key = "AIzaSyCTgbjx_lPe6xICfJ6p2WDiICP8J3AHn9Q"
-        loc = document.getElementById("LocationBox").value
-        loc = loc.replace(/ /g,"+");
-        googleResp = await axios.get("https://maps.googleapis.com/maps/api/geocode/json"+`?address=${loc}&key=${google_api_key}`);
-        
-        console.log(loc);
-        lat = googleResp["data"]["results"][0]["geometry"]["location"]["lat"].toString();
-        lng = googleResp["data"]["results"][0]["geometry"]["location"]["lng"].toString();
-    }
-    else{
-        ipiKey = "7c2dda37d14440"
-        ipiResp = await axios.get("https://ipinfo.io/"+`?token=${ipiKey}`)
-        var locSplitArr = ipiResp["data"]["loc"].split(",")
-        console.log(locSplitArr)
-        lat = locSplitArr[0]
-        lng = locSplitArr[1]
-    }
-
-    var response = await axios.get("/formdetails"+`?keyword=${keyW}&distance=${dist}&category=${document.getElementById("CategoryBox").value}&lat=${lat}&lng=${lng}`);
-    data = response.data;
-    console.log("data: "+data);
-
-    evntIdMap(data);
-
     if (document.getElementById("dataTable") != null){
         document.getElementById("body").removeChild(document.getElementById("dataTable"));
     }
@@ -113,19 +78,83 @@ async function searchFuncOnClick(){
         document.getElementById("body").removeChild(document.getElementById("venDetDiv"));
     }
 
-    if (JSON.stringify(data) === '{}'){
+    console.log("In Search Func!");
 
-        var blank = document.createElement("div");
-        blank.setAttribute("id","blank");
-        var txt = document.createTextNode("No Records found");
-        blank.appendChild(txt);
-        document.body.appendChild(blank);
+    f = document.getElementById("form1");
+    f.reportValidity();
+
+    if (document.getElementById("keywordBox").value == ""){
+        console.log("HELLO");
+        console.log(document.getElementById("keywordBox").checkValidity());
     }
 
     else{
-        createTable(data);
+
+        var lat = null;
+        var lng = null;
+        var dist = "10";
+
+        if (document.getElementById("DistanceBox").value != ""){
+            dist = document.getElementById("DistanceBox").value;
+        }
+
+        keyW = document.getElementById("keywordBox").value;
+        keyW = keyW.replace(/ /g,"+");
+        // console.log(keyW);
+
+        if (document.getElementById("cbox").checked == false){
+            google_api_key = "AIzaSyCTgbjx_lPe6xICfJ6p2WDiICP8J3AHn9Q"
+            loc = document.getElementById("LocationBox").value
+            loc = loc.replace(/ /g,"+");
+            googleResp = await axios.get("https://maps.googleapis.com/maps/api/geocode/json"+`?address=${loc}&key=${google_api_key}`);
+            
+            console.log("googleRes: "+googleResp);
+            if (googleResp["data"]["results"].length != 0){
+                lat = googleResp["data"]["results"][0]["geometry"]["location"]["lat"].toString();
+                lng = googleResp["data"]["results"][0]["geometry"]["location"]["lng"].toString();
+            }
+
+            else{
+                var blank = document.createElement("div");
+                blank.setAttribute("id","blank");
+                var txt = document.createTextNode("No Records found");
+                blank.appendChild(txt);
+                document.body.appendChild(blank);
+
+                return;
+            }
+            
+        }
+        else{
+            ipiKey = "7c2dda37d14440"
+            ipiResp = await axios.get("https://ipinfo.io/"+`?token=${ipiKey}`)
+            var locSplitArr = ipiResp["data"]["loc"].split(",")
+            // console.log(locSplitArr)
+            lat = locSplitArr[0]
+            lng = locSplitArr[1]
+        }
+
+        var response = await axios.get("/formdetails"+`?keyword=${keyW}&distance=${dist}&category=${document.getElementById("CategoryBox").value}&lat=${lat}&lng=${lng}`);
+        data = response.data;
+        console.log("data: "+data);
+
+        evntIdMap(data);
+
+        if (JSON.stringify(data) === '{}'){
+
+            var blank = document.createElement("div");
+            blank.setAttribute("id","blank");
+            var txt = document.createTextNode("No Records found");
+            blank.appendChild(txt);
+            document.body.appendChild(blank);
+        }
+
+        else{
+            createTable(data);
+        }
     }
 }
+
 
 function createTable(data){
 
@@ -196,32 +225,32 @@ function createTable(data){
     document.body.appendChild(tab);
 
     var eve = document.getElementById("Event");
-    eve.onclick = function(){sortTableAsc(2)};
+
+    if (sortAscEvnt == false){
+        eve.onclick = function(){sortTableAsc(2, sortAscEvnt)};
+    }
+    
 
     var ven = document.getElementById("Venue");
-    ven.onclick = function(){sortTableAsc(4)};
+    ven.onclick = function(){sortTableAsc(4, sortAscVen)};
 
     var gen = document.getElementById("Genre");
-    gen.onclick = function(){sortTableAsc(3)};
-
-    // else{
-    //     var eve = document.getElementById("Event");
-    //     eve.onclick = function(){sortTableDesc(2)};
-    
-    //     var ven = document.getElementById("Venue");
-    //     ven.onclick = function(){sortTableDesc(4)};
-
-    //     var gen = document.getElementById("Genre");
-    //     gen.onclick = function(){sortTableDesc(3)};
-
-    // console.log(tab);    
-    // }
+    gen.onclick = function(){sortTableAsc(3, sortAscGen)};
 }
 
-function sortTableAsc(idx){
+function sortTableAsc(idx, sortAsc){
 
     if (sortAsc == false){
         sortAsc = true;
+        if(idx == 2){
+            sortAscEvnt = sortAsc;
+        }
+        else if(idx == 3){
+            sortAscGen = sortAsc;
+        }
+        else{
+            sortAscVen = sortAsc;
+        }
 
         var tab, r, sw, x, y, doSw, i;
         tab = document.getElementById("dataTable");
@@ -253,6 +282,16 @@ function sortTableAsc(idx){
     else{
         sortAsc = false;
 
+        if(idx == 2){
+            sortAscEvnt = sortAsc;
+        }
+        else if(idx == 3){
+            sortAscGen = sortAsc;
+        }
+        else{
+            sortAscVen = sortAsc;
+        }
+
         var tab, r, sw, x, y, doSw, i;
         tab = document.getElementById("dataTable");
         sw = true;
@@ -281,44 +320,10 @@ function sortTableAsc(idx){
     }
 }
 
-// function sortTableDesc(idx){
-
-//     sortDesc = true;
-//     sortAsc = false;
-
-//     var tab, r, sw, x, y, doSw, i;
-//     tab = document.getElementById("dataTable");
-//     sw = true;
-
-//     while(sw){
-//         sw = false;
-//         r = tab.rows;
-
-//         for (i=1; i<(r.length-1); i++){
-//             doSw = false;
-//             x = r[i].getElementsByTagName("td")[idx];
-            
-//             y = r[i+1].getElementsByTagName("td")[idx];
-
-//             if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()){
-//                 doSw = true;
-//                 break;
-//             }
-//         }
-
-//         if(doSw){
-//             r[i].parentNode.insertBefore(r[i+1], r[i]);
-//             sw = true;
-//         }
-//     }
-
-// }
-
 function evntIdMap(data){
     for (let i=0; i<data.length; i++){
         map[data[i]["event"]] = data[i]["id"];
     }
-    console.log(map);
 }
 
 async function displayEventDetails(eventName){
@@ -334,7 +339,7 @@ async function displayEventDetails(eventName){
     console.log("in evnt detail func!");
     var eventResponse = await axios.get("/eventdetails"+`?id=${map[eventName]}`);
     respData = eventResponse.data;
-    console.log(respData);
+    console.log("respdata: "+respData);
 
     var date = "";
     var time = "";
@@ -460,7 +465,7 @@ async function displayEventDetails(eventName){
         txtContent.appendChild(datePVal);
     }
 
-    console.log("artists: ", artists);
+    // console.log("artists: ", artists);
 
     if (artists.length != 0){
         artDiv = document.createElement("div");
@@ -530,7 +535,7 @@ async function displayEventDetails(eventName){
     }
 
     if (ticketStatus != ""){
-        console.log(ticketStatus);
+        // console.log(ticketStatus);
         ticPKey = document.createElement("p");
         ticPKey.classList.add("key");
         ticKey = document.createTextNode("Ticket Status");
@@ -606,13 +611,31 @@ async function displayEventDetails(eventName){
     evntDetBox.append(content);
     document.body.appendChild(evntDetBox);
 
-    // ele = document.getElementById("evntDetBox");
-    // window.scrollTo(0, ele.scrollHeight);
+    // createVenue(ve);
+    venDiv = document.createElement("div");
+    venDiv.setAttribute("id","venDiv");
 
-    createVenue(ve);
+    venP = document.createElement("p");
+    venP.setAttribute("id","venP");
 
-    const scrollingElement = (document.scrollingElement || document.body);
-    scrollingElement.scrollTop = scrollingElement.scrollHeight;
+    venP.innerHTML = "Show Venue Details"
+
+    venDiv.appendChild(venP);
+
+    arrDiv = document.createElement("div");
+    arrDiv.setAttribute("id", "arrDiv");
+    arrDiv.onclick = function(){displayVenueDetails(ve)};
+
+    venDiv.appendChild(arrDiv);
+
+    document.body.appendChild(venDiv);
+
+    // const scrollingElement = (document.scrollingElement || document.body);
+    // scrollingElement.scrollTop = scrollingElement.scrollHeight;
+
+    const elm = document.getElementById("venDiv");
+    console.log(elm)
+    elm.scrollIntoView({behavior: "smooth", block: "start", inline:"end"});
 
 }
 
@@ -634,6 +657,8 @@ function createVenue(venueName){
     venDiv.appendChild(arrDiv);
 
     document.body.appendChild(venDiv);
+
+
 }
 
 async function displayVenueDetails(venueName){
@@ -648,7 +673,7 @@ async function displayVenueDetails(venueName){
     console.log("in Display func");
     var venueResponse = await axios.get("/venuedetails"+`?keyword=${venueName}`);
     respVenue = venueResponse.data;
-    console.log(respVenue);
+    console.log("respVenue: "+respVenue);
 
     firstLine = "";
     city = "";
@@ -772,4 +797,7 @@ async function displayVenueDetails(venueName){
 
     venDetDiv.appendChild(innerDiv);
     document.body.appendChild(venDetDiv);
+
+    const el = document.getElementById("venDetDiv");
+    el.scrollIntoView({behavior: "smooth", block: "start"});
 }
