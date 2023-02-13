@@ -749,12 +749,26 @@ async function displayVenueDetails(venueName){
         adLeftDiv = document.createElement("div");
         adLeftDiv.setAttribute("id","adLeftDiv");
 
+        adLeftSubDiv = document.createElement("div");
+        adLeftSubDiv.setAttribute("id","adLeftSubDiv");
+
+        adLeftLeftDiv = document.createElement("div");
+        adLeftLeftDiv.setAttribute("id","adLeftLeftDiv");
+
         padd = document.createElement("p");
         padd.setAttribute("id","padd");
         badd = document.createElement("b");
-        badd.innerHTML = "Address: ";
+        badd.innerHTML = "Address:"+'\xa0' + '\xa0';
         padd.appendChild(badd);
-        padd.innerHTML += firstLine;
+
+        adLeftLeftDiv.appendChild(padd);
+
+        adLeftRightDiv = document.createElement("div");
+        adLeftRightDiv.setAttribute("id","adLeftRightDiv");
+
+        pfline = document.createElement("p");
+        pfline.setAttribute("id","pfline");
+        pfline.innerHTML = firstLine;
 
         pcity = document.createElement("p");
         pcity.setAttribute("id","pcity");
@@ -763,6 +777,32 @@ async function displayVenueDetails(venueName){
         pcode = document.createElement("p");
         pcode.setAttribute("id","pcode");
         pcode.innerHTML = postCode;
+
+        adLeftRightDiv.appendChild(pfline);
+        adLeftRightDiv.appendChild(pcity);
+        adLeftRightDiv.appendChild(pcode);
+
+        adLeftSubDiv.appendChild(adLeftLeftDiv);
+        adLeftSubDiv.appendChild(adLeftRightDiv);
+        adLeftDiv.appendChild(adLeftSubDiv);
+
+        // padd = document.createElement("p");
+        // padd.setAttribute("id","padd");
+        // badd = document.createElement("b");
+        // badd.innerHTML = "Address: ";
+        // padd.appendChild(badd);
+        // padd.innerHTML += firstLine;
+
+        // pcity = document.createElement("p");
+        // pcity.setAttribute("id","pcity");
+        // pcity.innerHTML = city;
+
+        // pcode = document.createElement("p");
+        // pcode.setAttribute("id","pcode");
+        // pcode.innerHTML = postCode;
+
+        
+
         pgoogle = document.createElement("p");
         pgoogle.setAttribute("id","pgoogle");
 
@@ -775,9 +815,9 @@ async function displayVenueDetails(venueName){
 
         pgoogle.appendChild(agoogle);
 
-        adLeftDiv.appendChild(padd);
-        adLeftDiv.appendChild(pcity);
-        adLeftDiv.appendChild(pcode);
+        // adLeftDiv.appendChild(padd);
+        // adLeftDiv.appendChild(pcity);
+        // adLeftDiv.appendChild(pcode);
         adLeftDiv.appendChild(pgoogle);
         adDiv.appendChild(adLeftDiv);
     }

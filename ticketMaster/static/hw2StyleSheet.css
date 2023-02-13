@@ -307,7 +307,8 @@ th{
     height: auto;
     margin-top: 40px;
     border-radius: 20px;
-    padding: 25px;
+    padding: 35px;
+    /* padding-left: 30px; */
 }
 
 #evntHeader{
@@ -323,15 +324,20 @@ th{
 
 #cont{
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     justify-content:space-between;
     margin-bottom: 0px;
 }
 
 #imgCont{
-    max-width: 65%;
+    max-width: 60%;
+    width: max-content;
+    height: max-content;
+    /* max-height: 40%; */
     padding-right: 30px;
+    /* margin-bottom: 0px; */
     margin-bottom: 0px;
+    margin-top: 0px;
 }
 
 #imgSeat{
@@ -339,11 +345,14 @@ th{
     margin-bottom: 0px;
     max-width: 100%;
     object-fit: cover;
+    margin: 0 auto;
+    align-items: center;
 }
 #txtCont{
-    max-width: 30%;
+    max-width: 40%;
     height: auto;
     margin-bottom: 0px;
+    margin-top: 0px;
 }
 
 .key{
@@ -351,6 +360,7 @@ th{
     color: rgb(138, 255, 216);
     margin-bottom: 3px;
     font-family: 'Lato', sans-serif;
+    font-weight: bold;
 }
 
 .val{
@@ -492,25 +502,10 @@ th{
 }
 
 #padd{
-    margin: 0 auto;
+    /* margin: 0 auto; */
     margin-bottom: 0px;
-    text-align: center;
-    margin-top: 5px;
-    font-family: 'Lato', sans-serif;
-}
-
-#pcity{
-    margin: 0 auto;
+    text-align: right;
     margin-top: 0px;
-    margin-bottom: 0px;
-    text-align: center;
-    font-family: 'Lato', sans-serif;
-}
-
-#pcode{
-    margin: o auto;
-    margin-top: 0px;
-    text-align: center;
     font-family: 'Lato', sans-serif;
 }
 
@@ -532,6 +527,42 @@ th{
     /* padding-left: 40px; */
 }
 
+#adLeftSubDiv{
+    display: flex;
+    /* align-items: center; */
+    justify-content:center;
+    margin: 0 auto;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    width: max-content;
+
+}
+
+#pfline{
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+#pcity{
+    text-align: left;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+#pcode{
+    text-align: left;
+    margin-top: 0px;
+}
+
+#adLeftLeftDiv{
+    width: max-content;
+    font-family: 'Lato', sans-serif;
+}
+
+#adLeftRightDiv{
+    width: max-content;
+    font-family: 'Lato', sans-serif;
+}
+
 #adRightDiv{
     width: 50%;
     height: auto;
@@ -550,7 +581,8 @@ th{
 #pgoogle{
     margin: 0 auto;
     text-align: center;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    margin-top: 0px;
     font-family: 'Lato', sans-serif;
 }
 
