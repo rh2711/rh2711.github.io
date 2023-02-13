@@ -93,6 +93,7 @@ async function searchFuncOnClick(){
         var lat = null;
         var lng = null;
         var dist = "10";
+        var cat = null;
 
         if (document.getElementById("DistanceBox").value != ""){
             dist = document.getElementById("DistanceBox").value;
@@ -133,8 +134,10 @@ async function searchFuncOnClick(){
             lat = locSplitArr[0]
             lng = locSplitArr[1]
         }
+        cat = document.getElementById("CategoryBox").value.toString();
+        console.log("cat: "+cat);
 
-        var response = await axios.get("/formdetails"+`?keyword=${keyW}&distance=${dist}&category=${document.getElementById("CategoryBox").value}&lat=${lat}&lng=${lng}`);
+        var response = await axios.get("/formdetails"+`?keyword=${keyW}&distance=${dist}&category=${cat}&lat=${lat}&lng=${lng}`);
         data = response.data;
         console.log("data: "+data);
 
@@ -400,8 +403,9 @@ async function displayEventDetails(eventName){
 
     var price = "";
     if ("priceRanges" in respData){
-        price = respData["priceRanges"]["min"] + " - " + respData["priceRanges"]["max"] + " USD";
+        price = respData['priceRanges'][0]['min'] + " - " + respData['priceRanges'][0]['max'] + " USD";
     }
+    console.log(price);
 
     var ticketStatus = "";
     if ("status" in respData["dates"]){
@@ -417,16 +421,6 @@ async function displayEventDetails(eventName){
     if ("seatmap" in respData){
         seatMap = respData["seatmap"]["staticUrl"]
     }
-
-    // console.log(date)
-    // console.log(time)
-    // console.log(artists)
-    // console.log(ve)
-    // console.log(ge)
-    // console.log(price)
-    // console.log(ticketStatus)
-    // console.log(ticketAt)
-    // console.log(seatMap)
 
     if (document.getElementById("evntDetBox")!= null){
         document.body.removeChild(document.getElementById("evntDetBox"));
@@ -522,7 +516,7 @@ async function displayEventDetails(eventName){
     if (ge != ""){
         genPKey = document.createElement("p");
         genPKey.classList.add("key");
-        genKey = document.createTextNode("Genre")
+        genKey = document.createTextNode("Genre");
         genPKey.appendChild(genKey);
 
         genPVal = document.createElement("p");
@@ -532,6 +526,21 @@ async function displayEventDetails(eventName){
 
         txtContent.appendChild(genPKey);
         txtContent.appendChild(genPVal);
+    }
+
+    if (price != ""){
+        pricePKey = document.createElement("p");
+        pricePKey.classList.add("key");
+        priceKey = document.createTextNode("Price Ranges");
+        pricePKey.appendChild(priceKey);
+
+        pricePVal = document.createElement("p");
+        pricePVal.classList.add("val");
+        priceVal = document.createTextNode(price);
+        pricePVal.appendChild(priceVal);
+
+        txtContent.appendChild(pricePKey);
+        txtContent.appendChild(pricePVal);
     }
 
     if (ticketStatus != ""){

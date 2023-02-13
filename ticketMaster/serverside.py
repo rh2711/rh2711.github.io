@@ -14,13 +14,16 @@ def test():
     lng = request.args.get("lng")
     lat = request.args.get("lat")
 
+    print("category recieved: ",cat)
+    print("Arts-Theatre")
+
     keyword = keyword.replace(" ","+")
 
     hashCode = geohash.encode(lat, lng, 7)
 
     segmentDict = {"Music":"KZFzniwnSyZfZ7v7nJ",
                     "Sports":"KZFzniwnSyZfZ7v7nE",
-                    "Arts & Theatre":"KZFzniwnSyZfZ7v7na",
+                    "Arts-Theatre":"KZFzniwnSyZfZ7v7na",
                     "Film":"KZFzniwnSyZfZ7v7nn",
                     "Miscellaneous":"KZFzniwnSyZfZ7v7n1",
                     "Default":""}
