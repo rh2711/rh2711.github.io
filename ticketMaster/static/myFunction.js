@@ -78,17 +78,10 @@ async function searchFuncOnClick(){
         document.getElementById("body").removeChild(document.getElementById("venDetDiv"));
     }
 
-    console.log("In Search Func!");
-
     f = document.getElementById("form1");
     f.reportValidity();
 
-    if (document.getElementById("keywordBox").value == ""){
-        console.log("HELLO");
-        console.log(document.getElementById("keywordBox").checkValidity());
-    }
-
-    else{
+    if (document.getElementById("keywordBox").value != ""){
 
         var lat = null;
         var lng = null;
@@ -101,15 +94,14 @@ async function searchFuncOnClick(){
 
         keyW = document.getElementById("keywordBox").value;
         keyW = keyW.replace(/ /g,"+");
-        // console.log(keyW);
+
 
         if (document.getElementById("cbox").checked == false){
             google_api_key = "AIzaSyCTgbjx_lPe6xICfJ6p2WDiICP8J3AHn9Q"
             loc = document.getElementById("LocationBox").value
             loc = loc.replace(/ /g,"+");
             googleResp = await axios.get("https://maps.googleapis.com/maps/api/geocode/json"+`?address=${loc}&key=${google_api_key}`);
-            
-            console.log("googleRes: "+googleResp);
+
             if (googleResp["data"]["results"].length != 0){
                 lat = googleResp["data"]["results"][0]["geometry"]["location"]["lat"].toString();
                 lng = googleResp["data"]["results"][0]["geometry"]["location"]["lng"].toString();
@@ -130,12 +122,10 @@ async function searchFuncOnClick(){
             ipiKey = "7c2dda37d14440"
             ipiResp = await axios.get("https://ipinfo.io/"+`?token=${ipiKey}`)
             var locSplitArr = ipiResp["data"]["loc"].split(",")
-            // console.log(locSplitArr)
             lat = locSplitArr[0]
             lng = locSplitArr[1]
         }
         cat = document.getElementById("CategoryBox").value.toString();
-        console.log("cat: "+cat);
 
         var response = await axios.get("/formdetails"+`?keyword=${keyW}&distance=${dist}&category=${cat}&lat=${lat}&lng=${lng}`);
         data = response.data;
@@ -339,7 +329,6 @@ async function displayEventDetails(eventName){
         document.getElementById("body").removeChild(document.getElementById("venDetDiv"));
     }
 
-    console.log("in evnt detail func!");
     var eventResponse = await axios.get("/eventdetails"+`?id=${map[eventName]}`);
     respData = eventResponse.data;
     console.log("respdata: "+respData);
@@ -405,7 +394,6 @@ async function displayEventDetails(eventName){
     if ("priceRanges" in respData){
         price = respData['priceRanges'][0]['min'] + " - " + respData['priceRanges'][0]['max'] + " USD";
     }
-    console.log(price);
 
     var ticketStatus = "";
     if ("status" in respData["dates"]){
@@ -459,8 +447,6 @@ async function displayEventDetails(eventName){
         txtContent.appendChild(datePVal);
     }
 
-    // console.log("artists: ", artists);
-
     if (artists.length != 0){
         artDiv = document.createElement("div");
 
@@ -482,10 +468,14 @@ async function displayEventDetails(eventName){
             a.setAttribute("href",artUrl[j]);
             a.setAttribute("target","_blank");
             a.classList.add("anc");
-            t = document.createTextNode('\xa0' + "| " + artists[j])
+            
+            t = document.createTextNode(artists[j])
             a.appendChild(t)
             d.appendChild(a)
-
+            var pipe = document.createElement("span");
+            pipe.innerText = " | ";
+            pipe.style.color = "white";
+            artDiv.appendChild(pipe)
             artDiv.appendChild(d);
         }
 
@@ -544,7 +534,7 @@ async function displayEventDetails(eventName){
     }
 
     if (ticketStatus != ""){
-        // console.log(ticketStatus);
+
         ticPKey = document.createElement("p");
         ticPKey.classList.add("key");
         ticKey = document.createTextNode("Ticket Status");
@@ -642,9 +632,11 @@ async function displayEventDetails(eventName){
     // const scrollingElement = (document.scrollingElement || document.body);
     // scrollingElement.scrollTop = scrollingElement.scrollHeight;
 
-    const elm = document.getElementById("venDiv");
-    console.log(elm)
-    elm.scrollIntoView({behavior: "smooth", block: "start", inline:"end"});
+    // const elm = document.getElementById("venDiv");
+    // elm.scrollIntoView({behavior: "smooth", block: "start", inline:"end"});
+    const elm = document.getElementById("evntDetBox");
+    elm.scrollIntoView({behavior: "smooth"});
+
 
 }
 
@@ -677,9 +669,6 @@ async function displayVenueDetails(venueName){
         document.getElementById("body").removeChild(document.getElementById("venDetDiv"));
     }
 
-    document.body.removeChild(document.getElementById("venDiv"));
-
-    console.log("in Display func");
     var venueResponse = await axios.get("/venuedetails"+`?keyword=${venueName}`);
     respVenue = venueResponse.data;
     console.log("respVenue: "+respVenue);
@@ -841,11 +830,13 @@ async function displayVenueDetails(venueName){
         adRightDiv.appendChild(pRight);
         adDiv.appendChild(adRightDiv);
     }
-
+    
     innerDiv.appendChild(adDiv)
 
     venDetDiv.appendChild(innerDiv);
     document.body.appendChild(venDetDiv);
+
+    document.body.removeChild(document.getElementById("venDiv"));
 
     const el = document.getElementById("venDetDiv");
     el.scrollIntoView({behavior: "smooth", block: "start"});

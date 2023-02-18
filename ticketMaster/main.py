@@ -116,4 +116,6 @@ def getVenueDetails():
     return venueData.json()
 
 if __name__=="__main__":
-    app.run()
+    app.run(host='127.0.0.1', port=8080, debug=True)
+
+# https://rh2711-hw6.wn.r.appspot.com/formdetails?keyword=USC&distance=5&category=Sports&lat=34.0223519&lng=-118.285117
