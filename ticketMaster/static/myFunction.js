@@ -118,6 +118,7 @@ async function searchFuncOnClick(){
             }
             
         }
+        
         else{
             ipiKey = "7c2dda37d14440"
             ipiResp = await axios.get("https://ipinfo.io/"+`?token=${ipiKey}`)
@@ -673,10 +674,10 @@ async function displayVenueDetails(venueName){
     respVenue = venueResponse.data;
     console.log("respVenue: "+respVenue);
 
-    firstLine = "";
-    city = "";
-    postCode = "";
-    url = "";
+    firstLine = "N.A";
+    city = "N.A";
+    postCode = "N.A";
+    url = "N.A";
     imgPath = "";
 
     if ("_embedded" in respVenue && ("venues" in respVenue["_embedded"])){
@@ -724,17 +725,17 @@ async function displayVenueDetails(venueName){
     innerDiv.appendChild(pDiv);
 
     if (imgPath!= ""){
-        imgTag = document.createElement("img");
-        imgTag.setAttribute("id","imgTag");
-        imgTag.setAttribute("src",imgPath);
+    imgTag = document.createElement("img");
+    imgTag.setAttribute("id","imgTag");
+    imgTag.setAttribute("src",imgPath);
 
-        innerDiv.appendChild(imgTag)
+    innerDiv.appendChild(imgTag)
     }
 
     adDiv = document.createElement("div");
     adDiv.setAttribute("id","adDiv");
 
-    if (firstLine!="" || city!="" || postCode!=""){
+    // if (firstLine!="" || city!="" || postCode!=""){
         adLeftDiv = document.createElement("div");
         adLeftDiv.setAttribute("id","adLeftDiv");
 
@@ -797,6 +798,15 @@ async function displayVenueDetails(venueName){
 
         agoogle = document.createElement("a");
         agoogle.setAttribute("id","agoogle");
+        if (firstLine == "N.A"){
+            firstLine = ""
+        }
+        if (city == "N.A"){
+            city = ""
+        }
+        if (postCode == "N.A"){
+            postCode = ""
+        }
         agoogle.setAttribute("href","https://www.google.com/maps/search/"+`?api=1&query=${venueName}+${firstLine}+${city}+${postCode}`);
         agoogle.setAttribute("target","_blank");
 
@@ -809,9 +819,9 @@ async function displayVenueDetails(venueName){
         // adLeftDiv.appendChild(pcode);
         adLeftDiv.appendChild(pgoogle);
         adDiv.appendChild(adLeftDiv);
-    }
+    // }
 
-    if (url != ""){
+    // if (url != ""){
 
         adRightDiv = document.createElement("div");
         adRightDiv.setAttribute("id", "adRightDiv");
@@ -822,6 +832,10 @@ async function displayVenueDetails(venueName){
         aRight = document.createElement("a");
         aRight.setAttribute("id","aRight");
         aRight.setAttribute("href", url);
+        if (url=="N.A"){
+            aRight.style.pointerEvents="none";
+            aRight.style.cursor="default";
+        }
         aRight.setAttribute("target","_blank");
         aRight.innerHTML = "More events at this venue";
 
@@ -829,7 +843,7 @@ async function displayVenueDetails(venueName){
         
         adRightDiv.appendChild(pRight);
         adDiv.appendChild(adRightDiv);
-    }
+    // }
     
     innerDiv.appendChild(adDiv)
 
